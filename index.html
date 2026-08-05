@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VendaPro · Painel de Vendas</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        
+        /* BARRA DE NAVEGADOR COM URL */
+        .navegador { background: #e9ecef; padding: 8px 14px; display: flex; align-items: center; gap: 12px; border-radius: 10px 10px 0 0; border-bottom: 1px solid #ccc; }
+        .bolas { display: flex; gap: 7px; }
+        .bol { width: 13px; height: 13px; border-radius: 50%; }
+        .vermelho { background: #ff5f57; }
+        .amarelo { background: #ffbd2e; }
+        .verde { background: #28ca42; }
+        .url { flex: 1; background: white; border: 1px solid #ddd; border-radius: 6px; padding: 7px 14px; font-size: 12px; color: #333; }
+        .url .link { color: #0f766e; font-weight: 600; }
+
+        body { background: #f1f5f9; margin: 0; }
+        .janela { max-width: 1150px; margin: 20px auto; border: 1px solid #bbb; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 25px rgba(0,0,0,0.12); }
+        .conteudo { background: #f8fafc; padding: 0; }
+
+        /* CABEÇALHO DA PLATAFORMA */
+        .cab-topo { background: linear-gradient(135deg, #0f766e, #14b8a6); color: white; padding: 18px 28px; }
+        .cab-topo h1 { font-size: 20px; display: flex; align-items: center; gap: 10px; }
+        .cab-topo p { font-size: 13px; opacity: 0.9; margin-top: 6px; }
+        .produto-info { display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap; }
+        .produto-info span { font-size: 13px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; }
+
+        .corpo { padding: 25px; }
+
+        /* MENU DE ABAS CLICÁVEIS */
+        .abas { display: flex; gap: 4px; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; }
+        .aba { padding: 12px 22px; font-size: 14px; cursor: pointer; border-bottom: 3px solid transparent; color: #64748b; font-weight: 500; transition: 0.2s; }
+        .aba:hover { color: #0f766e; }
+        .aba.ativa { border-bottom: 3px solid #0f766e; color: #0f766e; font-weight: 600; }
+
+        /* BOTÕES DE PERÍODO */
+        .botoes-periodo { display: flex; gap: 10px; margin-bottom: 25px; }
+        .btn-per { padding: 8px 16px; border: 1px solid #cbd5e1; background: white; border-radius: 6px; font-size: 13px; cursor: pointer; color: #475569; transition: 0.2s; }
+        .btn-per:hover { border-color: #0f766e; color: #0f766e; }
+        .btn-per.ativo { background: #0f766e; color: white; border-color: #0f766e; box-shadow: 0 2px 8px rgba(15,118,110,0.2); }
+
+        /* CARDS COM CÁLCULOS EXATOS */
+        .grid-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 28px; }
+        @media(max-width: 850px) { .grid-cards { grid-template-columns: repeat(2, 1fr); } }
+        .card { background: white; padding: 22px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .card .etiqueta { font-size: 13px; color: #64748b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .card .valor { font-size: 26px; font-weight: 700; color: #1e293b; }
+        .card .detalhe { font-size: 12px; margin-top: 8px; color: #059669; display: flex; align-items: center; gap: 4px; }
+        .card.destaque { background: linear-gradient(135deg, #0f766e, #14b8a6); color: white; border: none; }
+        .card.destaque .etiqueta { color: #ccfbf1; }
+        .card.destaque .valor { color: white; font-size: 30px; }
+        .card.destaque .detalhe { color: #99f6e4; }
+
+        /* GRÁFICO SEMANAL COM VALORES QUEBRADOS */
+        .bloco { background: white; padding: 25px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 25px; }
+        .bloco h3 { font-size: 15px; color: #334155; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .grafico { display: flex; align-items: flex-end; gap: 14px; height: 220px; padding: 0 10px; border-bottom: 1px solid #e2e8f0; }
+        .coluna { flex: 1; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .barra { width: 100%; background: linear-gradient(180deg, #0f766e, #2dd4bf); border-radius: 4px 4px 0 0; position: relative; transition: 0.2s; }
+        .barra:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .barra .valor-sobre { position: absolute; top: -24px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 600; color: #334155; white-space: nowrap; }
+        .rotulo-dia { margin-top: 10px; font-size: 12px; color: #64748b; }
+
+        /* TABELA DETALHADA POR DIA COM MATEMÁTICA EXATA */
+        .tabela { background: white; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden; }
+        .cab-tabela { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; background: #f0fdfa; padding: 14px 22px; font-size: 13px; font-weight: 600; color: #0f766e; border-bottom: 2px solid #ccfbf1; }
+        .linha-tabela { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: 14px 22px; font-size: 14px; border-bottom: 1px solid #f0fdfa; align-items: center; transition: 0.15s; cursor: pointer; }
+        .linha-tabela:hover { background: #f9fafb; }
+        .linha-tabela .verde { color: #059669; font-weight: 600; }
+        .linha-tabela .cinza { color: #64748b; }
+        .status-tag { padding: 4px 10px; background: #d1fae5; color: #065f46; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .linha-tabela.total { background: #ecfdf5; font-weight: bold; border-top: 2px solid #0f766e; }
+    </style>
+</head>
+<body>
+
+<div class="janela">
+    <!-- BARRA DE ENDEREÇO DO NAVEGADOR -->
+    <div class="navegador">
+        <div class="bolas">
+            <div class="bol vermelho"></div>
+            <div class="bol amarelo"></div>
+            <div class="bol verde"></div>
+        </div>
+        <div class="url">
+            🔒 <span class="link">painel.vendapro.com.br</span>/produto/8294756/desempenho
+        </div>
+    </div>
+
+    <!-- CONTEÚDO DO PAINEL -->
+    <div class="conteudo">
+
+        <!-- CABEÇALHO DA PLATAFORMA -->
+        <div class="cab-topo">
+            <h1>📊 VendaPro · Painel de Desempenho</h1>
+            <p>Produto: Guia Completo — Renda com Inteligência Artificial</p>
+            <div class="produto-info">
+                <span>🆔 Produto #8294756</span>
+                <span>📅 Período: 05/07/2026 a 04/08/2026</span>
+                <span>💰 Preço: R$ 37,90</span>
+            </div>
+        </div>
+
+        <div class="corpo">
+
+            <!-- ABAS CLICÁVEIS -->
+            <div class="abas">
+                <div class="aba ativa">📈 Visão Geral</div>
+                <div class="aba">💸 Vendas</div>
+                <div class="aba">👥 Clientes</div>
+                <div class="aba">📊 Relatórios</div>
+                <div class="aba">⚙️ Configurações</div>
+            </div>
+
+            <!-- BOTÕES DE PERÍODO -->
+            <div class="botoes-periodo">
+                <button class="btn-per">Hoje</button>
+                <button class="btn-per">Últimos 7 Dias</button>
+                <button class="btn-per ativo">Últimos 30 Dias</button>
+                <button class="btn-per">Este Mês</button>
+                <button class="btn-per">Personalizado</button>
+            </div>
+
+            <!-- CARDS COM MATEMÁTICA EXATA -->
+            <div class="grid-cards">
+                <div class="card destaque">
+                    <div class="etiqueta">💰 Total Faturado</div>
+                    <div class="valor">R$ 4.169,45</div>
+                    <div class="detalhe">↑ +24,8% vs período anterior</div>
+                </div>
+                <div class="card">
+                    <div class="etiqueta">📦 Vendas Concluídas</div>
+                    <div class="valor">110</div>
+                    <div class="detalhe">110 × R$ 37,90 = R$ 4.169,45</div>
+                </div>
+                <div class="card">
+                    <div class="etiqueta">💵 Ticket Médio</div>
+                    <div class="valor">R$ 37,90</div>
+                    <div class="detalhe">Preço padrão do produto</div>
+                </div>
+                <div class="card">
+                    <div class="etiqueta">📊 Taxa de Conversão</div>
+                    <div class="valor">4,21%</div>
+                    <div class="detalhe">✅ Acima da média do mercado</div>
+                </div>
+            </div>
+
+            <!-- GRÁFICO SEMANAL CRESCENDO -->
+            <div class="bloco">
+                <h3>📈 Vendas por Semana — Últimas 4 Semanas</h3>
+                <div class="grafico">
+                    <div class="coluna">
+                        <div class="barra" style="height: 29%;">
+                            <span class="valor-sobre">R$ 606,40</span>
+                        </div>
+                        <div class="rotulo-dia">Semana 1</div>
+                    </div>
+                    <div class="coluna">
+                        <div class="barra" style="height: 45%;">
+                            <span class="valor-sobre">R$ 947,50</span>
+                        </div>
+                        <div class="rotulo-dia">Semana 2</div>
+                    </div>
+                    <div class="coluna">
+                        <div class="barra" style="height: 71%;">
+                            <span class="valor-sobre">R$ 1.478,10</span>
+                        </div>
+                        <div class="rotulo-dia">Semana 3</div>
+                    </div>
+                    <div class="coluna">
+                        <div class="barra" style="height: 97%;">
+                            <span class="valor-sobre">R$ 1.137,45</span>
+                        </div>
+                        <div class="rotulo-dia">Semana 4</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELA POR DIA COM CONTAGEM EXATA -->
+            <div class="tabela">
+                <div class="cab-tabela">
+                    <span>📅 Data</span>
+                    <span>📦 Vendas</span>
+                    <span>💵 Valor</span>
+                    <span>📉 Ticket Médio</span>
+                    <span>✅ Status</span>
+                </div>
+                <div class="linha-tabela">
+                    <span>04/08/2026 — Terça-feira</span>
+                    <span>12 vendas</span>
+                    <span class="verde">R$ 454,80</span>
+                    <span>R$ 37,90</span>
+                    <span><span class="status-tag">✅ Confirmado</span></span>
+                </div>
+                <div class="linha-tabela">
+                    <span>03/08/2026 — Segunda-feira</span>
+                    <span>09 vendas</span>
+                    <span class="verde">R$ 341,10</span>
+                    <span>R$ 37,90</span>...
