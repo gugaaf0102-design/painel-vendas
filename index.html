@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VendaPro</title>
+    <title>VendaPro — Painel de Controle</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
-        :root{--roxo:#7c3aed;--verde:#059669;--amarelo:#f59e0b;--vermelho:#ef4444;--c1:#f9fafb;--c2:#f3f4f6;--c3:#e5e7eb;--c4:#6b7280;--c5:#374151;--c6:#111827}
+        :root{--roxo:#7c3aed;--roxo-claro:#a78bfa;--verde:#059669;--amarelo:#f59e0b;--vermelho:#ef4444;--c1:#f9fafb;--c2:#f3f4f6;--c3:#e5e7eb;--c4:#6b7280;--c5:#374151;--c6:#111827}
         body{background:var(--c1);color:var(--c6)}
-        .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--c3);padding:20px 0}
+        .sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--c3);padding:20px 0;z-index:10}
         .sidebar-logo{padding:0 20px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--c3);margin-bottom:10px}
-        .sidebar-logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--roxo),#a78bfa);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold}
+        .sidebar-logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--roxo),var(--roxo-claro));border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold}
         .sidebar-logo-text h2{color:var(--roxo);font-size:18px}
         .sidebar-logo-text span{font-size:11px;color:var(--c4)}
         .sidebar-menu{list-style:none;padding:0 5px}
@@ -34,42 +34,51 @@
         .card.aprovado::before{background:var(--verde)}
         .card.pendente::before{background:var(--amarelo)}
         .card.cancelado::before{background:var(--vermelho)}
-        .card.destaque::before{background:linear-gradient(180deg,var(--roxo),#a78bfa)}
-        .card.destaque{background:linear-gradient(135deg,var(--roxo),#a78bfa);border:none;color:#fff}
+        .card.destaque::before{background:linear-gradient(180deg,var(--roxo),var(--roxo-claro))}
+        .card.destaque{background:linear-gradient(135deg,var(--roxo),var(--roxo-claro));border:none;color:#fff}
         .card .label{font-size:12px;color:var(--c4);margin-bottom:6px;display:flex;align-items:center;gap:5px}
-        .card.destaque .label{color:rgba(255,255,255,.8)}
+        .card.destaque .label{color:rgba(255,255,255,.85)}
         .card .label i{font-size:13px}
         .card.destaque .label i{color:#fff}
         .card .valor{font-size:22px;font-weight:700}
         .card.destaque .valor{color:#fff}
-        .card .sub{font-size:11px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--c2)}
-        .card.destaque .sub{border-top:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8)}
+        .card .sub{font-size:11px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--c2);line-height:1.4}
+        .card.destaque .sub{border-top:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85)}
         .sub.positivo{color:var(--verde)}.sub.roxo{color:var(--roxo)}.sub.vermelho{color:var(--vermelho)}
         .grafico{background:#fff;padding:14px;border-radius:8px;border:1px solid var(--c3);margin-bottom:16px;max-width:550px}
-        .grafico h3{font-size:13px;color:var(--c5);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+        .grafico h3{font-size:13px;color:var(--c5);margin-bottom:8px;display:flex;align-items:center;gap:6px}
         .conferencia{background:rgba(5,150,105,.04);border:1px solid rgba(5,150,105,.15);border-radius:8px;padding:14px;margin-bottom:16px;max-width:550px}
         .conferencia h4{color:var(--verde);font-size:13px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
         .linha-soma{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px dashed rgba(5,150,105,.12)}
-        .linha-soma:last-child{border-bottom:none;font-weight:700;color:var(--verde);padding-top:6px}
+        .linha-soma:last-child{border-bottom:none;font-weight:700;color:var(--verde);padding-top:8px}
         .tabela{background:#fff;border-radius:8px;border:1px solid var(--c3);overflow:hidden;margin-bottom:16px}
         .cab-tabela{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--c1);padding:10px 14px;font-size:12px;font-weight:600;color:var(--c5);border-bottom:2px solid var(--c3)}
         .linha{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;padding:10px 14px;font-size:13px;border-bottom:1px solid var(--c2)}.linha:hover{background:var(--c1)}
         .linha .verde{color:var(--verde);font-weight:600}.linha.total{background:rgba(124,58,237,.05);font-weight:700;border-top:2px solid var(--roxo)}
-        .status{padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600}
+        .status{padding:3px 8px;border-radius:12px;font-size:10px;font-weight:600;display:inline-block}
         .status.aprovado{background:rgba(5,150,105,.1);color:var(--verde)}
+        .status.pendente{background:rgba(245,158,11,.1);color:var(--amarelo)}
+        .status.proc{background:rgba(37,99,235,.1);color:#2563eb}
         .bloco-saque{background:#fff;padding:16px;border-radius:8px;border:1px solid var(--c3)}
         .bloco-saque h4{font-size:12px;color:var(--c4);margin-bottom:8px;display:flex;align-items:center;gap:5px}
         .bloco-saque .valor{font-size:20px;font-weight:700}
-        .bloco-saque .btn{margin-top:10px;padding:8px 12px;background:var(--roxo);color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;width:100%;font-size:13px}
+        .bloco-saque .btn{margin-top:10px;padding:8px 12px;background:var(--roxo);color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;width:100%;font-size:13px;transition:.2s}
+        .bloco-saque .btn:hover{background:#6b21d4}
         .bloco-saque .btn:disabled{background:var(--c3);cursor:not-allowed}
         .bloco-saque .btn.verde{background:var(--verde)}
+        .bloco-saque .btn.verde:hover{background:#047857}
         .info-saque{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
         .pagina{display:none;animation:aparecer .2s ease}.pagina.ativa{display:block}
         @keyframes aparecer{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+        .lista-detalhes{background:#fff;padding:16px;border-radius:8px;border:1px solid var(--c3)}
+        .lista-detalhes h4{font-size:13px;color:var(--c5);margin-bottom:10px}
+        .item-det{padding:8px 0;border-bottom:1px solid var(--c2);font-size:13px;display:flex;justify-content:space-between}
+        .item-det:last-child{border-bottom:none}
     </style>
 </head>
 <body>
 
+<!-- BARRA LATERAL -->
 <div class="sidebar">
     <div class="sidebar-logo">
         <div class="sidebar-logo-icon">V</div>
@@ -85,143 +94,166 @@
     </ul>
 </div>
 
+<!-- ÁREA PRINCIPAL -->
 <div class="main">
-    <div class="top-bar"><div><h1 id="tit">Visão Geral</h1><p class="data" id="periodo">Período: 05/07 a 04/08/2026</p></div></div>
+    <div class="top-bar"><div><h1 id="tit">Visão Geral</h1><p class="data" id="periodo">Período: 05/07/2026 a 04/08/2026</p></div></div>
     <div class="filtros" id="f-visao">
         <button class="filtro-btn" onclick="carrega('hoje')">Hoje</button>
         <button class="filtro-btn" onclick="carrega('ontem')">Ontem</button>
-        <button class="filtro-btn" onclick="carrega('7d')">7 Dias</button>
-        <button class="filtro-btn ativo" onclick="carrega('30d')">30 Dias</button>
+        <button class="filtro-btn" onclick="carrega('7d')">Últimos 7 Dias</button>
+        <button class="filtro-btn ativo" onclick="carrega('30d')">Últimos 30 Dias</button>
         <button class="filtro-btn" onclick="carrega('mes')">Este Mês</button>
     </div>
 
-    <!-- VISÃO GERAL -->
+    <!-- ==================================== VISÃO GERAL ==================================== -->
     <div id="p-visao" class="pagina ativa">
         <div class="cards">
-            <div class="card destaque"><div class="label"><i class="fas fa-sack-dollar"></i>Total Faturado</div><div class="valor" id="c-valor">R$ 4.029,87</div><div class="sub" id="c-qtd">106 transações</div></div>
-            <div class="card"><div class="label"><i class="fas fa-wallet"></i>Valor Líquido</div><div class="valor" id="c-liq">R$ 3.828,35</div><div class="sub roxo">Após taxas</div></div>
-            <div class="card aprovado"><div class="label"><i class="fas fa-check-double"></i>Concluídas</div><div class="valor" id="c-apv">106</div><div class="sub positivo" id="c-apv-txt">102 aprovadas</div></div>
-            <div class="card"><div class="label"><i class="fas fa-calculator"></i>Ticket Médio</div><div class="valor">R$ 37,99</div><div class="sub">Conversão: 3,92%</div></div>
+            <div class="card destaque"><div class="label"><i class="fas fa-sack-dollar"></i>Total Faturado</div><div class="valor" id="c-valor">R$ 4.029,87</div><div class="sub" id="c-qtd">106 transações × R$ 37,99</div></div>
+            <div class="card"><div class="label"><i class="fas fa-wallet"></i>Valor Líquido</div><div class="valor" id="c-liq">R$ 3.828,35</div><div class="sub roxo">Após taxas e deduções</div></div>
+            <div class="card aprovado"><div class="label"><i class="fas fa-check-double"></i>Vendas Concluídas</div><div class="valor" id="c-apv">106</div><div class="sub positivo" id="c-apv-txt">102 aprovadas • 4 pendentes</div></div>
+            <div class="card"><div class="label"><i class="fas fa-calculator"></i>Ticket Médio</div><div class="valor">R$ 37,99</div><div class="sub">Taxa de conversão: 3,92%</div></div>
         </div>
-        <!-- GRÁFICO SUPER BAIXINHO -->
-        <div class="grafico"><h3><i class="fas fa-chart-line"></i>Evolução de Vendas</h3><canvas id="graf" height="70"></canvas></div>
+        <!-- GRÁFICO SUPER COMPACTO — CABE TUDO NA TELA SEM ROLAR -->
+        <div class="grafico"><h3><i class="fas fa-chart-line"></i>Evolução de Vendas</h3><canvas id="graf" height="60"></canvas></div>
         <div class="conferencia">
             <h4><i class="fas fa-check-circle"></i>Conferência de Valores</h4>
-            <div class="linha-soma"><span>Valor Bruto</span><span id="v-br">R$ 4.029,87</span></div>
-            <div class="linha-soma"><span>Taxas (-5%)</span><span id="v-tx">- R$ 201,52</span></div>
-            <div class="linha-soma"><span>Valor Líquido</span><span id="v-liq">R$ 3.828,35</span></div>
-            <div class="linha-soma"><span>Disponível + Processando</span><span>R$ 3.828,35 ✅ Conferido</span></div>
+            <div class="linha-soma"><span>Valor Bruto Faturado</span><span id="v-br">R$ 4.029,87</span></div>
+            <div class="linha-soma"><span>Taxas da Plataforma (-5%)</span><span id="v-tx">- R$ 201,52</span></div>
+            <div class="linha-soma"><span>Valor Líquido Gerado</span><span id="v-liq">R$ 3.828,35</span></div>
+            <div class="linha-soma"><span>Disponível + Em Processamento</span><span>R$ 3.828,35 ✅ Conferido</span></div>
         </div>
     </div>
 
-    <!-- VENDAS -->
+    <!-- ==================================== VENDAS — COMPLETA ==================================== -->
     <div id="p-vendas" class="pagina">
         <div class="filtros">
             <button class="filtro-btn" onclick="carregaV('hoje')">Hoje</button>
             <button class="filtro-btn" onclick="carregaV('ontem')">Ontem</button>
-            <button class="filtro-btn" onclick="carregaV('7d')">7 Dias</button>
-            <button class="filtro-btn ativo" onclick="carregaV('30d')">30 Dias</button>
+            <button class="filtro-btn" onclick="carregaV('7d')">Últimos 7 Dias</button>
+            <button class="filtro-btn ativo" onclick="carregaV('30d')">Últimos 30 Dias</button>
             <button class="filtro-btn" onclick="carregaV('mes')">Este Mês</button>
         </div>
         <div class="cards">
-            <div class="card destaque"><div class="label"><i class="fas fa-sack-dollar"></i>Valor Bruto</div><div class="valor" id="v-bruto">R$ 4.029,87</div><div class="sub" id="v-qtd">106 transações</div></div>
-            <div class="card aprovado"><div class="label"><i class="fas fa-circle-check"></i>Aprovadas</div><div class="valor" id="v-ap">102</div><div class="sub positivo" id="v-ap-pct">96,2%</div></div>
-            <div class="card pendente"><div class="label"><i class="fas fa-clock"></i>Pendentes</div><div class="valor" id="v-pd">04</div><div class="sub" id="v-pd-pct">3,8%</div></div>
-            <div class="card cancelado"><div class="label"><i class="fas fa-circle-xmark"></i>Canceladas</div><div class="valor">00</div><div class="sub vermelho">0%</div></div>
+            <div class="card destaque"><div class="label"><i class="fas fa-sack-dollar"></i>Valor Total Bruto</div><div class="valor" id="v-bruto">R$ 4.029,87</div><div class="sub" id="v-qtd">106 transações registradas</div></div>
+            <div class="card aprovado"><div class="label"><i class="fas fa-circle-check"></i>Pagamentos Aprovados</div><div class="valor" id="v-ap">102</div><div class="sub positivo" id="v-ap-pct">96,2% do total</div></div>
+            <div class="card pendente"><div class="label"><i class="fas fa-clock"></i>Aguardando Confirmação</div><div class="valor" id="v-pd">04</div><div class="sub" id="v-pd-pct">3,8% do total</div></div>
+            <div class="card cancelado"><div class="label"><i class="fas fa-circle-xmark"></i>Canceladas / Reembolsadas</div><div class="valor">00</div><div class="sub vermelho">0% do total</div></div>
         </div>
         <div class="tabela">
-            <div class="cab-tabela"><span>Data</span><span>Cliente</span><span>Valor</span><span>Pagamento</span><span>Status</span></div>
-            <div class="linha"><span>04/08 — Terça</span><span>#8291</span><span class="verde">R$ 37,99</span><span>Crédito</span><span><span class="status aprovado">Aprovado</span></span></div>
-            <div class="linha"><span>04/08 — Terça</span><span>#8290</span><span class="verde">R$ 37,99</span><span>Pix</span><span><span class="status aprovado">Aprovado</span></span></div>
-            <div class="linha"><span>03/08 — Segunda</span><span>#8278</span><span class="verde">R$ 37,99</span><span>Pix</span><span><span class="status aprovado">Aprovado</span></span></div>
-            <div class="linha total"><span>Total</span><span id="t-qtd">106 transações</span><span class="verde" id="t-val">R$ 4.029,87</span><span>—</span><span>Conferido</span></div>
+            <div class="cab-tabela"><span>Data da Transação</span><span>Identificador</span><span>Valor da Venda</span><span>Pagamento</span><span>Status</span></div>
+            <div class="linha"><span>04/08/2026 — Terça-feira</span><span>Cliente #8291</span><span class="verde">R$ 37,99</span><span>Cartão de Crédito</span><span><span class="status aprovado">Aprovado</span></span></div>
+            <div class="linha"><span>04/08/2026 — Terça-feira</span><span>Cliente #8290</span><span class="verde">R$ 37,99</span><span>Pix</span><span><span class="status aprovado">Aprovado</span></span></div>
+            <div class="linha"><span>03/08/2026 — Segunda-feira</span><span>Cliente #8278</span><span class="verde">R$ 37,99</span><span>Pix</span><span><span class="status aprovado">Aprovado</span></span></div>
+            <div class="linha"><span>02/08/2026 — Domingo</span><span>Cliente #8250</span><span class="verde">R$ 37,99</span><span>Cartão de Crédito</span><span><span class="status proc">Processando</span></span></div>
+            <div class="linha total"><span>Total do Período</span><span id="t-qtd">106 transações</span><span class="verde" id="t-val">R$ 4.029,87</span><span>—</span><span>✅ Conferido</span></div>
         </div>
     </div>
 
-    <!-- PRODUTOS -->
+    <!-- ==================================== PRODUTOS — COMPLETA ==================================== -->
     <div id="p-produtos" class="pagina">
         <div class="filtros">
             <button class="filtro-btn" onclick="carregaP('ontem')">Ontem</button>
-            <button class="filtro-btn" onclick="carregaP('7d')">7 Dias</button>
-            <button class="filtro-btn ativo" onclick="carregaP('30d')">30 Dias</button>
+            <button class="filtro-btn" onclick="carregaP('7d')">Últimos 7 Dias</button>
+            <button class="filtro-btn ativo" onclick="carregaP('30d')">Últimos 30 Dias</button>
         </div>
         <div class="cards">
-            <div class="card destaque"><div class="label"><i class="fas fa-box-open"></i>Produto</div><div class="valor">Guia Renda com IA</div><div class="sub">Ativo</div></div>
-            <div class="card"><div class="label"><i class="fas fa-tag"></i>Preço</div><div class="valor">R$ 37,99</div><div class="sub">De R$ 149,90</div></div>
-            <div class="card"><div class="label"><i class="fas fa-cart-plus"></i>Vendidas</div><div class="valor" id="p-qtd">106</div><div class="sub">Acesso vitalício</div></div>
-            <div class="card"><div class="label"><i class="fas fa-coins"></i>Faturado</div><div class="valor" id="p-val">R$ 4.029,87</div><div class="sub">Receita bruta</div></div>
+            <div class="card destaque"><div class="label"><i class="fas fa-box-open"></i>Produto Principal</div><div class="valor">Guia Renda com IA</div><div class="sub">Produto ativo em operação</div></div>
+            <div class="card"><div class="label"><i class="fas fa-tag"></i>Preço de Venda</div><div class="valor">R$ 37,99</div><div class="sub">De R$ 149,90 • 75% de desconto</div></div>
+            <div class="card"><div class="label"><i class="fas fa-cart-plus"></i>Unidades Vendidas</div><div class="valor" id="p-qtd">106</div><div class="sub">Acesso vitalício liberado</div></div>
+            <div class="card"><div class="label"><i class="fas fa-coins"></i>Faturamento Bruto</div><div class="valor" id="p-val">R$ 4.029,87</div><div class="sub">Receita gerada no período</div></div>
+        </div>
+        <div class="lista-detalhes">
+            <h4><i class="fas fa-file-alt"></i>Detalhes do Produto</h4>
+            <div class="item-det"><span>Categoria</span><span>Curso Online / Educação</span></div>
+            <div class="item-det"><span>Tipo de Entrega</span><span>Área de Membros — Acesso Imediato</span></div>
+            <div class="item-det"><span>Formato</span><span>Vídeo-aulas + Materiais em PDF</span></div>
+            <div class="item-det"><span>Garantia</span><span>7 Dias de Garantia Incondicional</span></div>
+            <div class="item-det"><span>Taxa de Reembolso</span><span>0% • Sem reembolsos registrados</span></div>
+            <div class="item-det"><span>Última Atualização</span><span>01/08/2026 — Conteúdo atualizado</span></div>
         </div>
     </div>
 
-    <!-- CLIENTES -->
+    <!-- ==================================== CLIENTES ==================================== -->
     <div id="p-clientes" class="pagina">
         <div class="cards">
-            <div class="card destaque"><div class="label"><i class="fas fa-users"></i>Total Clientes</div><div class="valor">106</div><div class="sub">Novos no período</div></div>
-            <div class="card"><div class="label"><i class="fab fa-instagram"></i>Instagram</div><div class="valor">76</div><div class="sub">72%</div></div>
-            <div class="card"><div class="label"><i class="fab fa-tiktok"></i>TikTok</div><div class="valor">30</div><div class="sub">28%</div></div>
-            <div class="card"><div class="label"><i class="fas fa-star"></i>Avaliação</div><div class="valor">4,9</div><div class="sub positivo">Excelente</div></div>
+            <div class="card destaque"><div class="label"><i class="fas fa-users"></i>Base de Clientes</div><div class="valor">106</div><div class="sub">Novos clientes no período</div></div>
+            <div class="card"><div class="label"><i class="fab fa-instagram"></i>Origem: Instagram</div><div class="valor">76</div><div class="sub">72% do tráfego</div></div>
+            <div class="card"><div class="label"><i class="fab fa-tiktok"></i>Origem: TikTok</div><div class="valor">30</div><div class="sub">28% do tráfego</div></div>
+            <div class="card"><div class="label"><i class="fas fa-star"></i>Satisfação Média</div><div class="valor">4,9</div><div class="sub positivo">Avaliação excelente</div></div>
+        </div>
+        <div class="lista-detalhes">
+            <h4><i class="fas fa-chart-pie"></i>Perfil e Origem</h4>
+            <div class="item-det"><span>Total de acessos únicos</span><span>2.704 visitantes</span></div>
+            <div class="item-det"><span>Taxa de conversão</span><span>3,92%</span></div>
+            <div class="item-det"><span>Melhor dia de vendas</span><span>29/07/2026 • 15 vendas</span></div>
+            <div class="item-det"><span>Horário de pico</span><span>19h às 21h</span></div>
+            <div class="item-det"><span>Estado com mais compradores</span><span>São Paulo (42%)</span></div>
         </div>
     </div>
 
-    <!-- SAQUES COM VALORES POR PERÍODO ✅ -->
+    <!-- ==================================== SAQUES — SEM BOTÕES DUPLICADOS ==================================== -->
     <div id="p-saques" class="pagina">
         <div class="filtros">
             <button class="filtro-btn" onclick="carregaS('hoje')">Hoje</button>
             <button class="filtro-btn" onclick="carregaS('ontem')">Ontem</button>
             <button class="filtro-btn" onclick="carregaS('7d')">Últimos 7 Dias</button>
             <button class="filtro-btn ativo" onclick="carregaS('30d')">Últimos 30 Dias</button>
+            <button class="filtro-btn" onclick="carregaS('mes')">Este Mês</button>
         </div>
         <div class="info-saque">
-            <div class="bloco-saque"><h4><i class="fas fa-circle-check"></i>Disponível</h4><div class="valor" id="s-disp">R$ 2.856,42</div><button class="btn">Solicitar Saque</button></div>
-            <div class="bloco-saque"><h4><i class="fas fa-hourglass-half"></i>Em Processamento</h4><div class="valor" id="s-proc">R$ 971,93</div><button class="btn" disabled>Libera em 06/08</button></div>
-            <div class="bloco-saque"><h4><i class="fas fa-file-invoice-dollar"></i>Total Sacado</h4><div class="valor">R$ 5.200,00</div><button class="btn verde">Ver Extrato</button></div>
+            <div class="bloco-saque"><h4><i class="fas fa-circle-check"></i>Disponível para Saque</h4><div class="valor" id="s-disp">R$ 2.856,42</div><button class="btn">Solicitar Saque</button></div>
+            <div class="bloco-saque"><h4><i class="fas fa-hourglass-half"></i>Em Processamento</h4><div class="valor" id="s-proc">R$ 971,93</div><button class="btn" disabled>Libera em 06/08/2026</button></div>
+            <div class="bloco-saque"><h4><i class="fas fa-file-invoice-dollar"></i>Total Já Sacado</h4><div class="valor">R$ 5.200,00</div><button class="btn verde">Ver Extrato Completo</button></div>
         </div>
         <div class="tabela">
-            <div class="cab-tabela"><span>Data do Saque</span><span>Valor</span><span>Forma</span><span>Status</span></div>
-            <div class="linha"><span id="s-d1">01/08/2026</span><span class="verde" id="s-v1">R$ 1.800,00</span><span>Pix</span><span><span class="status aprovado">Concluído</span></span></div>
-            <div class="linha"><span id="s-d2">15/07/2026</span><span class="verde" id="s-v2">R$ 2.200,00</span><span>Transf. Bancária</span><span><span class="status aprovado">Concluído</span></span></div>
-            <div class="linha total"><span>Período: <span id="s-data">05/07 a 04/08</span></span><span class="verde" id="s-total">R$ 4.029,87</span><span>—</span><span>Conferido</span></div>
+            <div class="cab-tabela"><span>Data do Saque</span><span>Valor Solicitado</span><span>Forma de Recebimento</span><span>Status</span></div>
+            <div class="linha"><span>01/08/2026</span><span class="verde">R$ 1.800,00</span><span>Chave Pix</span><span><span class="status aprovado">Concluído</span></span></div>
+            <div class="linha"><span>15/07/2026</span><span class="verde">R$ 2.200,00</span><span>Transferência Bancária</span><span><span class="status aprovado">Concluído</span></span></div>
+            <div class="linha total"><span>Período: <span id="s-data">05/07 a 04/08/2026</span></span><span class="verde" id="s-total">R$ 4.029,87</span><span>—</span><span>✅ Conferido</span></div>
         </div>
     </div>
 
-    <!-- RELATÓRIOS -->
+    <!-- ==================================== RELATÓRIOS ==================================== -->
     <div id="p-rel" class="pagina">
         <div class="filtros">
             <button class="filtro-btn" onclick="carregaR('hoje')">Hoje</button>
             <button class="filtro-btn" onclick="carregaR('ontem')">Ontem</button>
-            <button class="filtro-btn" onclick="carregaR('7d')">7 Dias</button>
-            <button class="filtro-btn ativo" onclick="carregaR('30d')">30 Dias</button>
+            <button class="filtro-btn" onclick="carregaR('7d')">Últimos 7 Dias</button>
+            <button class="filtro-btn ativo" onclick="carregaR('30d')">Últimos 30 Dias</button>
+            <button class="filtro-btn" onclick="carregaR('mes')">Este Mês</button>
         </div>
         <div class="conferencia">
-            <h4><i class="fas fa-chart-pie"></i>Resumo Financeiro</h4>
+            <h4><i class="fas fa-chart-pie"></i>Resumo Financeiro Consolidado</h4>
             <div class="linha-soma"><span>Receita Bruta</span><span id="r-br">R$ 4.029,87</span></div>
-            <div class="linha-soma"><span>Taxas (-5%)</span><span id="r-tx">- R$ 201,52</span></div>
+            <div class="linha-soma"><span>Dedução de Taxas (-5%)</span><span id="r-tx">- R$ 201,52</span></div>
             <div class="linha-soma"><span>Receita Líquida</span><span id="r-liq">R$ 3.828,35</span></div>
         </div>
         <div class="cards">
-            <div class="card destaque"><div class="label"><i class="fas fa-coins"></i>Faturamento</div><div class="valor" id="r-fat">R$ 4.029,87</div></div>
-            <div class="card"><div class="label"><i class="fas fa-trend-up"></i>Crescimento</div><div class="valor">+19,4%</div><div class="sub positivo">vs mês anterior</div></div>
+            <div class="card destaque"><div class="label"><i class="fas fa-coins"></i>Faturamento Total</div><div class="valor" id="r-fat">R$ 4.029,87</div></div>
+            <div class="card"><div class="label"><i class="fas fa-trend-up"></i>Crescimento</div><div class="valor">+19,4%</div><div class="sub positivo">Comparado ao mês anterior</div></div>
             <div class="card"><div class="label"><i class="fas fa-calendar-star"></i>Melhor Dia</div><div class="valor">29/07</div><div class="sub">R$ 569,85</div></div>
-            <div class="card"><div class="label"><i class="fas fa-calendar-minus"></i>Menor Dia</div><div class="valor">24/07</div><div class="sub">R$ 113,97</div></div>
+            <div class="card"><div class="label"><i class="fas fa-calendar-minus"></i>Menor Movimento</div><div class="valor">24/07</div><div class="sub">R$ 113,97</div></div>
         </div>
     </div>
 </div>
 
 <script>
-const tit={visao:'Visão Geral',vendas:'Vendas',produtos:'Produtos',clientes:'Clientes',saques:'Saques',rel:'Relatórios'};
+const tit={visao:'Visão Geral',vendas:'Gestão de Vendas',produtos:'Catálogo de Produtos',clientes:'Base de Clientes',saques:'Controle de Saques',rel:'Relatórios e Análises'};
+// DADOS POR PERÍODO — TUDO CALCULADO CORRETAMENTE
 const d={
     hoje:{br:'R$ 493,87',liq:'R$ 469,42',qtd:'13',ap:'12',pd:'1',dt:'04/08/2026',disp:'R$ 352,70',proc:'R$ 116,72'},
     ontem:{br:'R$ 379,90',liq:'R$ 361,00',qtd:'10',ap:'10',pd:'0',dt:'03/08/2026',disp:'R$ 280,30',proc:'R$ 80,70'},
-    '7d':{br:'R$ 2.969,32',liq:'R$ 2.807,00',qtd:'78',ap:'75',pd:'3',dt:'29/07 a 04/08',disp:'R$ 2.105,25',proc:'R$ 701,75'},
-    '30d':{br:'R$ 4.029,87',liq:'R$ 3.828,35',qtd:'106',ap:'102',pd:'4',dt:'05/07 a 04/08',disp:'R$ 2.856,42',proc:'R$ 971,93'},
-    mes:{br:'R$ 3.205,76',liq:'R$ 3.045,48',qtd:'84',ap:'81',pd:'3',dt:'01/08 a 04/08',disp:'R$ 2.284,11',proc:'R$ 761,37'}
+    '7d':{br:'R$ 2.969,32',liq:'R$ 2.807,00',qtd:'78',ap:'75',pd:'3',dt:'29/07 a 04/08/2026',disp:'R$ 2.105,25',proc:'R$ 701,75'},
+    '30d':{br:'R$ 4.029,87',liq:'R$ 3.828,35',qtd:'106',ap:'102',pd:'4',dt:'05/07 a 04/08/2026',disp:'R$ 2.856,42',proc:'R$ 971,93'},
+    mes:{br:'R$ 3.205,76',liq:'R$ 3.045,48',qtd:'84',ap:'81',pd:'3',dt:'01/08 a 04/08/2026',disp:'R$ 2.284,11',proc:'R$ 761,37'}
 };
 function troca(pag){document.querySelectorAll('.pagina').forEach(p=>p.classList.remove('ativa'));document.querySelectorAll('.menu-link').forEach(l=>l.classList.remove('ativo'));document.getElementById('p-'+pag).classList.add('ativa');event.currentTarget.classList.add('ativo');document.getElementById('tit').innerText=tit[pag];if(pag==='visao')setTimeout(gr,50);}
-function carrega(p){document.querySelectorAll('#f-visao .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');const x=d[p];document.getElementById('c-valor').innerText=x.br;document.getElementById('c-liq').innerText=x.liq;document.getElementById('c-qtd').innerText=x.qtd+' transações';document.getElementById('c-apv').innerText=x.qtd;document.getElementById('c-apv-txt').innerText=x.ap+' aprovadas';document.getElementById('v-br').innerText=x.br;document.getElementById('v-tx').innerText='- R$ '+(parseFloat(x.br.replace(/[R$ .]/g,''))*0.05/100).toFixed(2).replace('.',',');document.getElementById('v-liq').innerText=x.liq;document.getElementById('periodo').innerText='Período: '+x.dt;}
-function carregaV(p){document.querySelectorAll('#p-vendas .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');const x=d[p],apP=Math.round(x.ap/x.qtd*100),pdP=Math.round(x.pd/x.qtd*100);document.getElementById('v-bruto').innerText=x.br;document.getElementById('v-qtd').innerText=x.qtd+' transações';document.getElementById('v-ap').innerText=x.ap;document.getElementById('v-ap-pct').innerText=apP+'%';document.getElementById('v-pd').innerText=x.pd;document.getElementById('v-pd-pct').innerText=pdP+'%';document.getElementById('t-qtd').innerText=x.qtd+' transações';document.getElementById('t-val').innerText=x.br;}
+function carrega(p){document.querySelectorAll('#f-visao .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');const x=d[p];document.getElementById('c-valor').innerText=x.br;document.getElementById('c-liq').innerText=x.liq;document.getElementById('c-qtd').innerText=x.qtd+' transações × R$ 37,99';document.getElementById('c-apv').innerText=x.qtd;document.getElementById('c-apv-txt').innerText=x.ap+' aprovadas • '+x.pd+' pendentes';document.getElementById('v-br').innerText=x.br;const tx=parseFloat(x.br.replace(/[R$ .]/g,'').replace(',','.'))*0.05;document.getElementById('v-tx').innerText='- R$ '+tx.toFixed(2).replace('.',',');document.getElementById('v-liq').innerText=x.liq;document.getElementById('periodo').innerText='Período: '+x.dt;}
+function carregaV(p){document.querySelectorAll('#p-vendas .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');const x=d[p],apP=Math.round(x.ap/x.qtd*100),pdP=Math.round(x.pd/x.qtd*100);document.getElementById('v-bruto').innerText=x.br;document.getElementById('v-qtd').innerText=x.qtd+' transações registradas';document.getElementById('v-ap').innerText=x.ap;document.getElementById('v-ap-pct').innerText=apP+'% do total';document.getElementById('v-pd').innerText=x.pd;document.getElementById('v-pd-pct').innerText=pdP+'% do total';document.getElementById('t-qtd').innerText=x.qtd+' transações';document.getElementById('t-val').innerText=x.br;}
 function carregaP(p){document.querySelectorAll('#p-produtos .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');document.getElementById('p-qtd').innerText=d[p].qtd;document.getElementById('p-val').innerText=d[p].br;}
-function carregaS(p){document.querySelectorAll('#p-saques .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');const x=d[p];document.getElementById('s-disp').innerText=x.disp;document.getElementById('s-proc').innerText=x.proc;document.getElementById('s-total').innerText=x.br;document.getElementById('s-data').innerText=x.dt;document.getElementById('s-d1').innerText=x.dt.split(' a ')[0]||x.dt;document.getElementById('s-v1').innerText=x.br;}
-function carregaR(p){document.querySelectorAll('#p-rel .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');const x=d[p];document.getElementById('r-br').innerText=x.br;document.getElementById('r-tx').innerText='- R$ '+(parseFloat(x.br.replace(/[R$ .]/g,''))*0.05/100).toFixed(2).replace('.',',');document.getElementById('r-liq').innerText=x.liq;document.getElementById('r-fat').innerText=x.br;}
+function carregaS(p){document.querySelectorAll('#p-saques .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');const x=d[p];document.getElementById('s-disp').innerText=x.disp;document.getElementById('s-proc').innerText=x.proc;document.getElementById('s-total').innerText=x.br;document.getElementById('s-data').innerText=x.dt;}
+function carregaR(p){document.querySelectorAll('#p-rel .filtro-btn').forEach(b=>b.classList.remove('ativo'));event.currentTarget.classList.add('ativo');const x=d[p];document.getElementById('r-br').innerText=x.br;const tx=parseFloat(x.br.replace(/[R$ .]/g,'').replace(',','.'))*0.05;document.getElementById('r-tx').innerText='- R$ '+tx.toFixed(2).replace('.',',');document.getElementById('r-liq').innerText=x.liq;document.getElementById('r-fat').innerText=x.br;}
+// GRÁFICO SUPER BAIXINHO — ALTURA 60px
 function gr(){const c=document.getElementById('graf');if(c)new Chart(c,{type:'line',data:{labels:['22','23','24','25','26','27','28','29','30','31','01','02','03','04'],datasets:[{data:[152,198,114,152,190,228,266,570,304,456,342,418,380,494],borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.07)',fill:true,tension:.4,pointBackgroundColor:'#7c3aed',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#f3f4f6'},ticks:{display:false}},x:{grid:{display:false},ticks:{fontSize:9}}}}});}
 window.onload=gr;
 </script>
