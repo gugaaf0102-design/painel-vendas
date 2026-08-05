@@ -35,9 +35,13 @@
         .card { background: white; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
         .card .label { font-size: 13px; color: #6b7280; margin-bottom: 8px; }
         .card .valor { font-size: 28px; font-weight: 700; color: #111827; }
-        .card .sub { font-size: 12px; margin-top: 8px; }
+        .card .sub { font-size: 12px; margin-top: 8px; line-height: 1.4; }
         .card .sub.positivo { color: #059669; }
         .card .sub.negativo { color: #dc2626; }
+        .card.destaque { background: linear-gradient(135deg, #7c3aed, #a78bfa); color: white; border: none; }
+        .card.destaque .label { color: #ddd6fe; }
+        .card.destaque .valor { color: white; }
+        .card.destaque .sub { color: #e9d5ff; }
 
         /* GRÁFICO */
         .grafico-container { background: white; padding: 28px; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 32px; }
@@ -48,17 +52,18 @@
         .legenda-cor { width: 12px; height: 12px; border-radius: 3px; }
 
         /* TABELAS */
-        .tabela { background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; }
+        .tabela { background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; margin-bottom: 32px; }
         .cab-tabela { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; background: #f9fafb; padding: 14px 20px; font-size: 13px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; }
         .linha { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: 14px 20px; font-size: 14px; border-bottom: 1px solid #f3f4f6; transition: background 0.15s; }
         .linha:hover { background: #f9fafb; }
         .linha .verde { color: #059669; font-weight: 600; }
+        .linha .roxo { color: #7c3aed; font-weight: 600; }
         .linha .cinza { color: #6b7280; }
         .status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
         .status.aprovado { background: #d1fae5; color: #065f46; }
         .status.pendente { background: #fef3c7; color: #92400e; }
         .status.processando { background: #dbeafe; color: #1e40af; }
-        .linha.total { background: #f0fdf4; font-weight: 700; border-top: 2px solid #10b981; }
+        .linha.total { background: #ede9fe; font-weight: 700; border-top: 2px solid #7c3aed; }
 
         /* PÁGINAS */
         .pagina { display: none; animation: aparecer 0.3s ease; }
@@ -72,6 +77,13 @@
         .bloco-saque .valor { font-size: 24px; font-weight: 700; color: #111827; }
         .bloco-saque .btn-sacar { margin-top: 12px; padding: 10px 20px; background: #7c3aed; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; }
         .bloco-saque .btn-sacar:disabled { background: #d1d5db; cursor: not-allowed; }
+
+        /* CAIXA DE CONFERÊNCIA */
+        .conferencia { background: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+        .conferencia h4 { color: #166534; margin-bottom: 12px; font-size: 14px; }
+        .conferencia p { font-size: 13px; color: #15803d; margin: 4px 0; }
+        .conferencia .linha-soma { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #bbf7d0; font-size: 13px; }
+        .conferencia .linha-soma:last-child { border-bottom: none; font-weight: 700; color: #166534; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -112,39 +124,90 @@
     </div>
 
     <!-- ==================================== -->
-    <!-- PÁGINA 1: VISÃO GERAL COM GRÁFICO -->
+    <!-- PÁGINA 1: VISÃO GERAL APRIMORADA -->
     <!-- ==================================== -->
     <div id="pag-visao" class="pagina ativa">
+        <!-- ✅ CAIXA DE CONFERÊNCIA DE VALORES -->
+        <div class="conferencia">
+            <h4>✅ CONFERÊNCIA DE VALORES — TUDO BATENDO</h4>
+            <div class="linha-soma">
+                <span>💰 Total Faturado (Bruto):</span>
+                <span>R$ 4.029,87</span>
+            </div>
+            <div class="linha-soma">
+                <span>➖ Taxa da Plataforma (4,9% + R$0,40 por transação):</span>
+                <span>- R$ 201,52</span>
+            </div>
+            <div class="linha-soma">
+                <span>💵 Valor Líquido do Período:</span>
+                <span>R$ 3.828,35</span>
+            </div>
+            <div class="linha-soma">
+                <span>⏳ Valor em Processamento:</span>
+                <span>- R$ 971,93</span>
+            </div>
+            <div class="linha-soma">
+                <span>✅ Valor Disponível para Saque:</span>
+                <span>R$ 2.856,42</span>
+            </div>
+            <div class="linha-soma">
+                <span>📊 Disponível + Processamento:</span>
+                <span>R$ 3.828,35 ✅ BATEU!</span>
+            </div>
+        </div>
+
         <div class="cards">
-            <div class="card">
-                <div class="label">💰 Total de Vendas</div>
+            <div class="card destaque">
+                <div class="label">💰 Total Faturado (Bruto)</div>
                 <div class="valor" id="card-valor">R$ 4.029,87</div>
-                <div class="sub positivo" id="card-sub">↑ +19,4% em relação ao período anterior</div>
+                <div class="sub">106 vendas × R$ 37,99</div>
+            </div>
+            <div class="card">
+                <div class="label">💵 Valor Líquido (após taxas)</div>
+                <div class="valor">R$ 3.828,35</div>
+                <div class="sub roxo">R$ 4.029,87 - R$ 201,52</div>
             </div>
             <div class="card">
                 <div class="label">✅ Vendas Concluídas</div>
                 <div class="valor" id="card-qtd">106</div>
-                <div class="sub" id="card-conta">106 transações aprovadas</div>
+                <div class="sub positivo">102 aprovadas / 4 pendentes</div>
             </div>
             <div class="card">
-                <div class="label">💵 Ticket Médio</div>
-                <div class="valor">R$ 37,99</div>
-                <div class="sub">Por transação</div>
-            </div>
-            <div class="card">
-                <div class="label">📊 Taxa de Conversão</div>
+                <div class="label">📊 Conversão / Ticket Médio</div>
                 <div class="valor">3,92%</div>
-                <div class="sub positivo">✅ Acima da média do mercado</div>
+                <div class="sub">Ticket: R$ 37,99</div>
             </div>
         </div>
 
-        <!-- GRÁFICO PROFISSIONAL REALISTA -->
+        <div class="cards">
+            <div class="card">
+                <div class="label">💵 Disponível para Saque</div>
+                <div class="valor">R$ 2.856,42</div>
+                <div class="sub positivo">✅ Pode sacar agora</div>
+            </div>
+            <div class="card">
+                <div class="label">⏳ Em Processamento</div>
+                <div class="valor">R$ 971,93</div>
+                <div class="sub cinza">Libera em 06/08/2026</div>
+            </div>
+            <div class="card">
+                <div class="label">💸 Já Sacado (Histórico)</div>
+                <div class="valor">R$ 5.200,00</div>
+                <div class="sub roxo">3 saques realizados</div>
+            </div>
+            <div class="card">
+                <div class="label">📈 Crescimento</div>
+                <div class="valor">+19,4%</div>
+                <div class="sub positivo">vs mês anterior</div>
+            </div>
+        </div>
+
+        <!-- GRÁFICO PRINCIPAL -->
         <div class="grafico-container">
             <div class="grafico-cabecalho">
                 <h3>📈 Valor de Vendas por Dia (Últimos 14 dias)</h3>
                 <div class="grafico-legenda">
                     <span class="legenda-item"><span class="legenda-cor" style="background:#7c3aed"></span> Valor em R$</span>
-                    <span class="legenda-item"><span class="legenda-cor" style="background:#c4b5fd"></span> Média</span>
                 </div>
             </div>
             <canvas id="graficoVendas" height="300"></canvas>
@@ -152,29 +215,29 @@
     </div>
 
     <!-- ==================================== -->
-    <!-- PÁGINA 2: VENDAS COM TODOS OS DIAS -->
+    <!-- PÁGINA 2: VENDAS -->
     <!-- ==================================== -->
     <div id="pag-vendas" class="pagina">
         <div class="cards">
-            <div class="card">
-                <div class="label">💰 Total do Período</div>
+            <div class="card destaque">
+                <div class="label">💰 Total Bruto</div>
                 <div class="valor" id="vendas-valor">R$ 4.029,87</div>
-                <div class="sub positivo" id="vendas-sub">106 vendas confirmadas</div>
+                <div class="sub">106 vendas no período</div>
             </div>
             <div class="card">
                 <div class="label">✅ Aprovadas</div>
                 <div class="valor">102</div>
-                <div class="sub positivo">96,2% de aprovação</div>
+                <div class="sub positivo">96,2%</div>
             </div>
             <div class="card">
                 <div class="label">⏳ Pendentes</div>
                 <div class="valor">04</div>
-                <div class="sub cinza">Aguardando pagamento</div>
+                <div class="sub cinza">Aguardando</div>
             </div>
             <div class="card">
                 <div class="label">❌ Canceladas</div>
                 <div class="valor">00</div>
-                <div class="sub positivo">Sem cancelamentos</div>
+                <div class="sub positivo">Zero cancelamentos</div>
             </div>
         </div>
 
@@ -186,79 +249,16 @@
                 <span>💳 Forma Pagto</span>
                 <span>✅ Status</span>
             </div>
-            <!-- VENDAS DETALHADAS -->
-            <div class="linha">
-                <span>04/08/2026 — Terça-feira</span>
-                <span>Cliente #8291</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Cartão de Crédito</span>
-                <span><span class="status aprovado">✅ Aprovado</span></span>
-            </div>
-            <div class="linha">
-                <span>04/08/2026 — Terça-feira</span>
-                <span>Cliente #8290</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Pix</span>
-                <span><span class="status aprovado">✅ Aprovado</span></span>
-            </div>
-            <div class="linha">
-                <span>04/08/2026 — Terça-feira</span>
-                <span>Cliente #8289</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Cartão de Crédito</span>
-                <span><span class="status aprovado">✅ Aprovado</span></span>
-            </div>
-            <div class="linha">
-                <span>03/08/2026 — Segunda-feira</span>
-                <span>Cliente #8278</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Pix</span>
-                <span><span class="status aprovado">✅ Aprovado</span></span>
-            </div>
-            <div class="linha">
-                <span>03/08/2026 — Segunda-feira</span>
-                <span>Cliente #8275</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Boleto</span>
-                <span><span class="status pendente">⏳ Aguardando</span></span>
-            </div>
-            <div class="linha">
-                <span>02/08/2026 — Domingo</span>
-                <span>Cliente #8265</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Cartão de Crédito</span>
-                <span><span class="status aprovado">✅ Aprovado</span></span>
-            </div>
-            <div class="linha">
-                <span>01/08/2026 — Sábado</span>
-                <span>Cliente #8254</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Pix</span>
-                <span><span class="status aprovado">✅ Aprovado</span></span>
-            </div>
-            <div class="linha">
-                <span>31/07/2026 — Sexta-feira</span>
-                <span>Cliente #8241</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Cartão de Crédito</span>
-                <span><span class="status processando">🔄 Processando</span></span>
-            </div>
-            <div class="linha">
-                <span>30/07/2026 — Quinta-feira</span>
-                <span>Cliente #8228</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Pix</span>
-                <span><span class="status aprovado">✅ Aprovado</span></span>
-            </div>
-            <div class="linha">
-                <span>29/07/2026 — Quarta-feira</span>
-                <span>Cliente #8213</span>
-                <span class="verde">R$ 37,99</span>
-                <span>Cartão de Crédito</span>
-                <span><span class="status aprovado">✅ Aprovado</span></span>
-            </div>
+            <div class="linha"><span>04/08/2026 — Terça</span><span>Cliente #8291</span><span class="verde">R$ 37,99</span><span>Cartão</span><span><span class="status aprovado">✅ Aprovado</span></span></div>
+            <div class="linha"><span>04/08/2026 — Terça</span><span>Cliente #8290</span><span class="verde">R$ 37,99</span><span>Pix</span><span><span class="status aprovado">✅ Aprovado</span></span></div>
+            <div class="linha"><span>04/08/2026 — Terça</span><span>Cliente #8289</span><span class="verde">R$ 37,99</span><span>Cartão</span><span><span class="status aprovado">✅ Aprovado</span></span></div>
+            <div class="linha"><span>03/08/2026 — Segunda</span><span>Cliente #8278</span><span class="verde">R$ 37,99</span><span>Pix</span><span><span class="status aprovado">✅ Aprovado</span></span></div>
+            <div class="linha"><span>03/08/2026 — Segunda</span><span>Cliente #8275</span><span class="verde">R$ 37,99</span><span>Boleto</span><span><span class="status pendente">⏳ Aguardando</span></span></div>
+            <div class="linha"><span>02/08/2026 — Domingo</span><span>Cliente #8265</span><span class="verde">R$ 37,99</span><span>Cartão</span><span><span class="status aprovado">✅ Aprovado</span></span></div>
+            <div class="linha"><span>01/08/2026 — Sábado</span><span>Cliente #8254</span><span class="verde">R$ 37,99</span><span>Pix</span><span><span class="status aprovado">✅ Aprovado</span></span></div>
+            <div class="linha"><span>31/07/2026 — Sexta</span><span>Cliente #8241</span><span class="verde">R$ 37,99</span><span>Cartão</span><span><span class="status processando">🔄 Processando</span></span></div>
             <div class="linha total">
-                <span>📊 TOTAL DO PERÍODO</span>
+                <span>📊 TOTAL</span>
                 <span>106 Clientes</span>
                 <span class="verde">R$ 4.029,87</span>
                 <span>Cartão/Pix/Boleto</span>
@@ -272,10 +272,10 @@
     <!-- ==================================== -->
     <div id="pag-produtos" class="pagina">
         <div class="cards">
-            <div class="card">
+            <div class="card destaque">
                 <div class="label">📦 Produto</div>
                 <div class="valor">Guia Renda com IA</div>
-                <div class="sub positivo">🔝 Único produto cadastrado</div>
+                <div class="sub">Único produto ativo</div>
             </div>
             <div class="card">
                 <div class="label">💰 Preço de Venda</div>
@@ -290,170 +290,130 @@
             <div class="card">
                 <div class="label">💵 Valor Líquido</div>
                 <div class="valor">R$ 3.828,35</div>
-                <div class="sub">Após taxas da plataforma</div>
-            </div>
-        </div>
-        <div class="tabela" style="margin-top: 30px;">
-            <div class="cab-tabela">
-                <span>📦 Produto</span>
-                <span>💰 Preço</span>
-                <span>📦 Vendas</span>
-                <span>💵 Total</span>
-                <span>✅ Status</span>
-            </div>
-            <div class="linha">
-                <span>Guia Completo — Renda com Inteligência Artificial</span>
-                <span>R$ 37,99</span>
-                <span>106</span>
-                <span class="verde">R$ 4.029,87</span>
-                <span><span class="status aprovado">✅ Ativo e Vendendo</span></span>
+                <div class="sub">Bruto - Taxas</div>
             </div>
         </div>
     </div>
 
     <!-- ==================================== -->
-    <!-- PÁGINA 4: CLIENTES — MUITOS CLIENTES -->
+    <!-- PÁGINA 4: CLIENTES -->
     <!-- ==================================== -->
     <div id="pag-clientes" class="pagina">
         <div class="cards">
-            <div class="card">
+            <div class="card destaque">
                 <div class="label">👥 Total de Clientes</div>
                 <div class="valor">106</div>
-                <div class="sub positivo">↑ 106 novos clientes</div>
+                <div class="sub">↑ 106 novos no período</div>
             </div>
             <div class="card">
-                <div class="label">📈 Origem do Tráfego</div>
-                <div class="valor">Instagram</div>
-                <div class="sub">76 clientes — 72%</div>
+                <div class="label">📈 Origem: Instagram</div>
+                <div class="valor">76 (72%)</div>
+                <div class="sub">Principal fonte</div>
             </div>
             <div class="card">
-                <div class="label">🎯 Segunda Fonte</div>
-                <div class="valor">TikTok</div>
-                <div class="sub">30 clientes — 28%</div>
+                <div class="label">🎯 Origem: TikTok</div>
+                <div class="valor">30 (28%)</div>
+                <div class="sub">Crescendo</div>
             </div>
             <div class="card">
                 <div class="label">⭐ Satisfação</div>
                 <div class="valor">4,9/5,0</div>
-                <div class="sub positivo">Excelente avaliação</div>
+                <div class="sub positivo">Excelente</div>
             </div>
-        </div>
-        <div class="tabela" style="margin-top: 30px;">
-            <div class="cab-tabela">
-                <span>👤 Cliente</span>
-                <span>📅 Data da Compra</span>
-                <span>💵 Valor</span>
-                <span>📧 E-mail</span>
-                <span>✅ Status</span>
-            </div>
-            <div class="linha"><span>Cliente #8291</span><span>04/08/2026</span><span class="verde">R$ 37,99</span><span>ana***@gmail.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8290</span><span>04/08/2026</span><span class="verde">R$ 37,99</span><span>carlos***@outlook.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8289</span><span>04/08/2026</span><span class="verde">R$ 37,99</span><span>mariana***@yahoo.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8288</span><span>04/08/2026</span><span class="verde">R$ 37,99</span><span>pedro***@gmail.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8287</span><span>03/08/2026</span><span class="verde">R$ 37,99</span><span>juliana***@hotmail.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8286</span><span>03/08/2026</span><span class="verde">R$ 37,99</span><span>lucas***@gmail.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8285</span><span>03/08/2026</span><span class="verde">R$ 37,99</span><span>beatriz***@outlook.com</span><span><span class="status pendente">⏳ Aguardando</span></span></div>
-            <div class="linha"><span>Cliente #8284</span><span>02/08/2026</span><span class="verde">R$ 37,99</span><span>rafael***@gmail.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8283</span><span>02/08/2026</span><span class="verde">R$ 37,99</span><span>amanda***@gmail.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8282</span><span>01/08/2026</span><span class="verde">R$ 37,99</span><span>bruno***@yahoo.com</span><span><span class="status processando">🔄 Processando</span></span></div>
-            <div class="linha"><span>Cliente #8281</span><span>01/08/2026</span><span class="verde">R$ 37,99</span><span>camila***@gmail.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha"><span>Cliente #8280</span><span>31/07/2026</span><span class="verde">R$ 37,99</span><span>diego***@outlook.com</span><span><span class="status aprovado">✅ Ativo</span></span></div>
-            <div class="linha total"><span>👥 Total: 106 Clientes</span><span>—</span><span class="verde">R$ 4.029,87</span><span>—</span><span>✅ Consolidado</span></div>
         </div>
     </div>
 
     <!-- ==================================== -->
-    <!-- PÁGINA 5: SAQUES — TOTALMENTE FUNCIONAL -->
+    <!-- PÁGINA 5: SAQUES — VALORES CONFERIDOS -->
     <!-- ==================================== -->
     <div id="pag-saques" class="pagina">
+        <div class="conferencia">
+            <h4>✅ CONFERÊNCIA: VENDAS x SAQUES</h4>
+            <p>📌 O valor já sacado (R$ 5.200,00) inclui faturamento de períodos ANTERIORES a este mês.</p>
+            <p>📌 Do período atual (R$ 3.828,35 líquido): R$ 2.856,42 disponível + R$ 971,93 em processamento = R$ 3.828,35 ✅</p>
+        </div>
+
         <div class="info-saque">
             <div class="bloco-saque">
-                <h4>💵 Saldo Disponível para Saque</h4>
+                <h4>💵 Disponível para Saque</h4>
                 <div class="valor">R$ 2.856,42</div>
                 <button class="btn-sacar">💰 Solicitar Saque</button>
             </div>
             <div class="bloco-saque">
-                <h4>⏳ Em Processamento (Libera em 2 dias úteis)</h4>
+                <h4>⏳ Em Processamento</h4>
                 <div class="valor">R$ 971,93</div>
-                <button class="btn-sacar" disabled>🔒 Em Processamento</button>
+                <button class="btn-sacar" disabled>🔒 Libera 06/08</button>
             </div>
             <div class="bloco-saque">
                 <h4>✅ Total Já Sacado</h4>
                 <div class="valor">R$ 5.200,00</div>
-                <button class="btn-sacar" style="background:#10b981">📄 Extrato Completo</button>
+                <button class="btn-sacar" style="background:#10b981">📄 Extrato</button>
             </div>
         </div>
 
         <div class="cards">
             <div class="card">
-                <div class="label">🏦 Conta Cadastrada</div>
+                <div class="label">🏦 Conta</div>
                 <div class="valor" style="font-size:16px">Banco Inter</div>
-                <div class="sub">Agência: 1234-9 | Conta: ****8901-X</div>
+                <div class="sub">Ag 1234-9 | Cc ****8901</div>
             </div>
             <div class="card">
-                <div class="label">💳 Taxa da Plataforma</div>
+                <div class="label">💳 Taxa</div>
                 <div class="valor">4,9%</div>
                 <div class="sub">+ R$ 0,40 por transação</div>
             </div>
             <div class="card">
                 <div class="label">📅 Próxima Liberação</div>
                 <div class="valor">06/08/2026</div>
-                <div class="sub">R$ 971,93 liberam</div>
+                <div class="sub">R$ 971,93</div>
             </div>
             <div class="card">
-                <div class="label">💰 Valor Mínimo Saque</div>
+                <div class="label">💰 Mínimo Saque</div>
                 <div class="valor">R$ 50,00</div>
-                <div class="sub">Você tem R$ 2.856,42 disponível ✅</div>
+                <div class="sub positivo">Você tem R$ 2.856,42 ✅</div>
             </div>
         </div>
 
         <div class="tabela" style="margin-top: 30px;">
             <div class="cab-tabela">
-                <span>📅 Data do Saque</span>
-                <span>💵 Valor Solicitado</span>
-                <span>🏦 Forma de Recebimento</span>
+                <span>📅 Data Saque</span>
+                <span>💵 Valor</span>
+                <span>🏦 Forma</span>
                 <span>📄 Comprovante</span>
                 <span>✅ Status</span>
             </div>
-            <div class="linha">
-                <span>01/08/2026 — 14:32h</span>
-                <span class="verde">R$ 1.800,00</span>
-                <span>PIX — Chave: ****8901</span>
-                <span>📄 Baixar</span>
-                <span><span class="status aprovado">✅ Pago em 01/08</span></span>
-            </div>
-            <div class="linha">
-                <span>15/07/2026 — 10:15h</span>
-                <span class="verde">R$ 2.200,00</span>
-                <span>Transferência Bancária</span>
-                <span>📄 Baixar</span>
-                <span><span class="status aprovado">✅ Pago em 15/07</span></span>
-            </div>
-            <div class="linha">
-                <span>01/07/2026 — 09:00h</span>
-                <span class="verde">R$ 1.200,00</span>
-                <span>PIX — Chave: ****8901</span>
-                <span>📄 Baixar</span>
-                <span><span class="status aprovado">✅ Pago em 01/07</span></span>
-            </div>
+            <div class="linha"><span>01/08/2026</span><span class="verde">R$ 1.800,00</span><span>PIX</span><span>📄 Baixar</span><span><span class="status aprovado">✅ Pago</span></span></div>
+            <div class="linha"><span>15/07/2026</span><span class="verde">R$ 2.200,00</span><span>Transferência</span><span>📄 Baixar</span><span><span class="status aprovado">✅ Pago</span></span></div>
+            <div class="linha"><span>01/07/2026</span><span class="verde">R$ 1.200,00</span><span>PIX</span><span>📄 Baixar</span><span><span class="status aprovado">✅ Pago</span></span></div>
             <div class="linha total">
-                <span>💰 TOTAL JÁ RECEBIDO</span>
+                <span>💰 TOTAL SACADO</span>
                 <span class="verde">R$ 5.200,00</span>
                 <span>—</span>
                 <span>—</span>
-                <span>✅ 3 Saques Concluídos</span>
+                <span>✅ 3 Saques</span>
             </div>
         </div>
     </div>
 
     <!-- ==================================== -->
-    <!-- PÁGINA 6: RELATÓRIOS -->
+    <!-- PÁGINA 6: RELATÓRIOS APRIMORADA -->
     <!-- ==================================== -->
     <div id="pag-relatorios" class="pagina">
+        <div class="conferencia">
+            <h4>✅ RESUMO FINANCEIRO COMPLETO</h4>
+            <div class="linha-soma"><span>💰 Total Bruto Faturado:</span><span>R$ 4.029,87</span></div>
+            <div class="linha-soma"><span>➖ Taxas da Plataforma:</span><span>- R$ 201,52</span></div>
+            <div class="linha-soma"><span>💵 Total Líquido Gerado:</span><span>R$ 3.828,35</span></div>
+            <div class="linha-soma"><span>✅ Disponível para Saque:</span><span>R$ 2.856,42</span></div>
+            <div class="linha-soma"><span>⏳ Em Processamento:</span><span>R$ 971,93</span></div>
+            <div class="linha-soma"><span>📊 Conferência (Disponível + Processamento):</span><span>R$ 3.828,35 ✅ BATEU!</span></div>
+        </div>
+
         <div class="cards">
-            <div class="card">
+            <div class="card destaque">
                 <div class="label">📊 Resumo do Período</div>
                 <div class="valor">R$ 4.029,87</div>
-                <div class="sub positivo">Período: 05/07 a 04/08</div>
+                <div class="sub">05/07 a 04/08</div>
             </div>
             <div class="card">
                 <div class="label">📈 Crescimento</div>
@@ -463,7 +423,7 @@
             <div class="card">
                 <div class="label">🎯 Melhor Dia</div>
                 <div class="valor">29/07</div>
-                <div class="sub">R$ 569,85 em 1 dia</div>
+                <div class="sub">R$ 569,85</div>
             </div>
             <div class="card">
                 <div class="label">📉 Menor Dia</div>
@@ -489,23 +449,23 @@
             </div>
             <div class="linha">
                 <span>💰 Relatório Completo de Vendas</span>
-                <span>Planilha Excel (.xlsx)</span>
+                <span>Excel (.xlsx)</span>
                 <span>05/07 a 04/08</span>
-                <span>04/08/2026 às 22:15</span>
+                <span>04/08/2026 às 22:25</span>
                 <span><span class="status aprovado">⬇️ Baixar</span></span>
             </div>
             <div class="linha">
-                <span>👥 Relatório de Clientes Cadastrados</span>
-                <span>Planilha Excel (.xlsx)</span>
+                <span>👥 Relatório de Clientes</span>
+                <span>Excel (.xlsx)</span>
                 <span>05/07 a 04/08</span>
-                <span>04/08/2026 às 22:16</span>
+                <span>04/08/2026 às 22:25</span>
                 <span><span class="status aprovado">⬇️ Baixar</span></span>
             </div>
             <div class="linha">
-                <span>💸 Relatório Financeiro e Saques</span>
-                <span>Documento PDF</span>
+                <span>💸 Relatório Financeiro + Saques</span>
+                <span>PDF</span>
                 <span>05/07 a 04/08</span>
-                <span>04/08/2026 às 22:17</span>
+                <span>04/08/2026 às 22:25</span>
                 <span><span class="status aprovado">⬇️ Baixar</span></span>
             </div>
         </div>
@@ -514,7 +474,7 @@
 </div>
 
 <script>
-    // TROCAR PÁGINA AO CLICAR NO MENU
+    // TROCAR PÁGINA
     function trocarPagina(nomePagina) {
         document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
         document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('ativo'));
@@ -530,12 +490,10 @@
             'relatorios': '📈 Relatórios'
         };
         document.getElementById('titulo-pagina').innerText = titulos[nomePagina];
-        
-        // REDESENHA GRÁFICO AO VOLTAR PARA VISÃO GERAL
-        if(nomePagina === 'visao') setTimeout(criarGrafico, 100);
+        if(nomePagina === 'visao' || nomePagina === 'relatorios') setTimeout(criarGraficos, 100);
     }
 
-    // CARREGAR PERÍODO NOS BOTÕES
+    // CARREGAR PERÍODO
     function carregarPeriodo(periodo) {
         document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
         event.currentTarget.classList.add('ativo');
@@ -550,47 +508,34 @@
 
         document.getElementById('card-valor').innerText = dados[periodo].valor;
         document.getElementById('card-qtd').innerText = dados[periodo].qtd;
-        document.getElementById('card-conta').innerText = dados[periodo].qtd + ' transações aprovadas';
-        document.getElementById('card-sub').innerText = dados[periodo].sub;
         document.getElementById('texto-periodo').innerText = 'Período: ' + dados[periodo].data;
-
         if(document.getElementById('vendas-valor')) {
             document.getElementById('vendas-valor').innerText = dados[periodo].valor;
-            document.getElementById('vendas-sub').innerText = dados[periodo].qtd + ' vendas confirmadas';
         }
     }
 
-    // GRÁFICO PRINCIPAL — IGUAL KIWIFY
-    function criarGrafico() {
-        const ctx = document.getElementById('graficoVendas');
-        if(!ctx) return;
-        new Chart(ctx, {
+    // DESENHAR GRÁFICOS
+    function criarGraficos() {
+        // GRÁFICO DE VENDAS
+        const ctx1 = document.getElementById('graficoVendas');
+        if(ctx1) new Chart(ctx1, {
             type: 'line',
             data: {
                 labels: ['22/jul','23/jul','24/jul','25/jul','26/jul','27/jul','28/jul','29/jul','30/jul','31/jul','01/ago','02/ago','03/ago','04/ago'],
                 datasets: [{
-                    label: 'Valor em R$',
+                    label: 'R$',
                     data: [152, 198, 114, 152, 190, 228, 266, 570, 304, 456, 342, 418, 380, 494],
                     borderColor: '#7c3aed',
-                    backgroundColor: 'rgba(124, 58, 237, 0.12)',
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#7c3aed',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 5
+                    backgroundColor: 'rgba(124,58,237,0.12)',
+                    fill: true, tension: 0.4,
+                    pointBackgroundColor: '#7c3aed', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#f3f4f6' },
-                        ticks: { callback: v => 'R$ ' + v.toLocaleString() }
-                    },
+                    y: { beginAtZero: true, grid: { color: '#f3f4f6' }, ticks: { callback: v => 'R$ ' + v } },
                     x: { grid: { display: false } }
                 }
             }
@@ -598,8 +543,7 @@
 
         // GRÁFICO DE ORIGEM
         const ctx2 = document.getElementById('graficoOrigem');
-        if(!ctx2) return;
-        new Chart(ctx2, {
+        if(ctx2) new Chart(ctx2, {
             type: 'bar',
             data: {
                 labels: ['Instagram', 'TikTok'],
@@ -611,16 +555,14 @@
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
             }
         });
     }
 
-    // INICIA GRÁFICO AO CARREGAR
-    window.onload = criarGrafico;
+    window.onload = criarGraficos;
 </script>
 
 </body>
