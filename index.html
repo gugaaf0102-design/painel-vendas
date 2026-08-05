@@ -77,7 +77,7 @@
         .filtro-btn.ativo { background: var(--roxo); color: white; border-color: var(--roxo); box-shadow: 0 2px 6px rgba(124,58,237,0.2); }
 
         /* CARDS */
-        .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+        .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; }
         @media(max-width: 1000px) { .cards { grid-template-columns: repeat(2, 1fr); } }
         .card {
             background: white; padding: 22px; border-radius: var(--raio); border: var(--borda);
@@ -109,16 +109,16 @@
         .card.destaque .valor { color: white; }
         .card.destaque .sub { border-top: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); }
 
-        /* GRÁFICO */
+        /* GRÁFICO — AGORA BEM MENOR */
         .grafico-container {
-            background: white; padding: 24px; border-radius: var(--raio); border: var(--borda);
-            margin-bottom: 28px; max-width: 680px; box-shadow: var(--sombra);
+            background: white; padding: 20px; border-radius: var(--raio); border: var(--borda);
+            margin-bottom: 24px; max-width: 600px; box-shadow: var(--sombra);
         }
-        .grafico-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: var(--borda); }
-        .grafico-cabecalho h3 { font-size: 15px; color: var(--cinza-700); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .grafico-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: var(--borda); }
+        .grafico-cabecalho h3 { font-size: 14px; color: var(--cinza-700); font-weight: 600; display: flex; align-items: center; gap: 8px; }
 
         /* TABELAS */
-        .tabela { background: white; border-radius: var(--raio); border: var(--borda); overflow: hidden; margin-bottom: 28px; box-shadow: var(--sombra); }
+        .tabela { background: white; border-radius: var(--raio); border: var(--borda); overflow: hidden; margin-bottom: 24px; box-shadow: var(--sombra); }
         .cab-tabela {
             display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
             background: var(--cinza-50); padding: 14px 20px; font-size: 13px;
@@ -126,7 +126,7 @@
         }
         .linha {
             display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-            padding: 16px 20px; font-size: 14px; border-bottom: 1px solid var(--cinza-100);
+            padding: 14px 20px; font-size: 14px; border-bottom: 1px solid var(--cinza-100);
             transition: background 0.15s;
         }
         .linha:hover { background: var(--cinza-50); }
@@ -143,7 +143,7 @@
         @keyframes aparecer { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
         /* INFO SAQUES */
-        .info-saque { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 28px; }
+        .info-saque { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
         .bloco-saque { background: white; padding: 24px; border-radius: var(--raio); border: var(--borda); box-shadow: var(--sombra); }
         .bloco-saque h4 { font-size: 13px; color: var(--cinza-500); margin-bottom: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
         .bloco-saque .valor { font-size: 24px; font-weight: 700; color: var(--cinza-900); }
@@ -154,10 +154,10 @@
         .bloco-saque .btn-sacar:hover { background: #6b21d4; }
         .bloco-saque .btn-sacar:disabled { background: var(--cinza-200); cursor: not-allowed; }
 
-        /* CAIXA DE CONFERÊNCIA */
+        /* CAIXA DE CONFERÊNCIA — AGORA EMBAIXO DO GRÁFICO */
         .conferencia {
             background: rgba(5,150,105,0.04); border: 1px solid rgba(5,150,105,0.15);
-            border-radius: var(--raio); padding: 20px; margin-bottom: 28px;
+            border-radius: var(--raio); padding: 20px; margin-bottom: 24px; max-width: 600px;
         }
         .conferencia h4 { color: var(--verde); margin-bottom: 12px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .conferencia .linha-soma {
@@ -222,17 +222,10 @@
     </div>
 
     <!-- ==================================== -->
-    <!-- VISÃO GERAL -->
+    <!-- VISÃO GERAL → CARDS → GRÁFICO → CONFERÊNCIA EMBAIXO -->
     <!-- ==================================== -->
     <div id="pag-visao" class="pagina ativa">
-        <div class="conferencia">
-            <h4><i class="fas fa-check-circle"></i> Conferência de Valores</h4>
-            <div class="linha-soma"><span>Valor Bruto Faturado</span><span id="vis-bruto">R$ 4.029,87</span></div>
-            <div class="linha-soma"><span>Taxas da Plataforma</span><span id="vis-taxas">- R$ 201,52</span></div>
-            <div class="linha-soma"><span>Valor Líquido Gerado</span><span id="vis-liquido">R$ 3.828,35</span></div>
-            <div class="linha-soma"><span>Disponível + Em Processamento</span><span>R$ 3.828,35 ✅ Conferido</span></div>
-        </div>
-
+        <!-- CARDS PRIMEIRO -->
         <div class="cards">
             <div class="card destaque">
                 <div class="label"><i class="fas fa-sack-dollar"></i> Total Faturado</div>
@@ -256,11 +249,21 @@
             </div>
         </div>
 
+        <!-- GRÁFICO MENORZINHO → AGORA COMPACTO -->
         <div class="grafico-container">
             <div class="grafico-cabecalho">
                 <h3><i class="fas fa-chart-line"></i> Evolução de Vendas</h3>
             </div>
-            <canvas id="graficoVendas" height="160"></canvas>
+            <canvas id="graficoVendas" height="110"></canvas>
+        </div>
+
+        <!-- CONFERÊNCIA AGORA EMBAIXO DO GRÁFICO ✅ -->
+        <div class="conferencia">
+            <h4><i class="fas fa-check-circle"></i> Conferência de Valores</h4>
+            <div class="linha-soma"><span>Valor Bruto Faturado</span><span id="vis-bruto">R$ 4.029,87</span></div>
+            <div class="linha-soma"><span>Taxas da Plataforma</span><span id="vis-taxas">- R$ 201,52</span></div>
+            <div class="linha-soma"><span>Valor Líquido Gerado</span><span id="vis-liquido">R$ 3.828,35</span></div>
+            <div class="linha-soma"><span>Disponível + Em Processamento</span><span>R$ 3.828,35 ✅ Conferido</span></div>
         </div>
     </div>
 
@@ -454,7 +457,7 @@
     </div>
 
     <!-- ==================================== -->
-    <!-- RELATÓRIOS -->
+    <!-- RELATÓRIOS → GRÁFICO TAMBÉM MENOR -->
     <!-- ==================================== -->
     <div id="pag-relatorios" class="pagina">
         <div class="filtros">
@@ -493,7 +496,7 @@
             <div class="grafico-cabecalho">
                 <h3><i class="fas fa-chart-pie"></i> Origem do Tráfego e Vendas</h3>
             </div>
-            <canvas id="graficoOrigem" height="100"></canvas>
+            <canvas id="graficoOrigem" height="80"></canvas>
         </div>
     </div>
 
@@ -584,23 +587,23 @@
                     data:[152,198,114,152,190,228,266,570,304,456,342,418,380,494],
                     borderColor:'#7c3aed', backgroundColor:'rgba(124,58,237,0.08)',
                     fill:true, tension:0.4, pointBackgroundColor:'#7c3aed',
-                    pointBorderColor:'#fff', pointBorderWidth:2, pointRadius:4
+                    pointBorderColor:'#fff', pointBorderWidth:2, pointRadius:3
                 }]
             },
             options:{responsive:true, maintainAspectRatio:false,
                 plugins:{legend:{display:false}},
-                scales:{y:{beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{color:'#9ca3af'}},
-                    x:{grid:{display:false}, ticks:{color:'#9ca3af'}}}
+                scales:{y:{beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{display:false}},
+                    x:{grid:{display:false}, ticks:{fontSize:10}}}
             }
         });
 
         const co = document.getElementById('graficoOrigem');
         if(co) new Chart(co, {
             type:'bar',
-            data:{labels:['Instagram','TikTok'], datasets:[{data:[76,30], backgroundColor:['#7c3aed','#c4b5fd'], borderRadius:6}]},
+            data:{labels:['Instagram','TikTok'], datasets:[{data:[76,30], backgroundColor:['#7c3aed','#c4b5fd'], borderRadius:4}]},
             options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
                 scales:{y:{beginAtZero:true, grid:{color:'#f3f4f6'}, ticks:{display:false}},
-                    x:{grid:{display:false}, ticks:{color:'#6b7280', font:{weight:'600'}}}}
+                    x:{grid:{display:false}, ticks:{fontSize:11, font:{weight:'600'}}}}
             }
         });
     }
